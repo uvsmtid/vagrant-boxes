@@ -6,6 +6,9 @@ Fedora 21 Server x86_64 "Minimal Install"
 Fedora 21 Server was installed using [netinstall x86_64 ISO image][1] with
 SHA256 hash `56af126a50c227d779a200b414f68ea7bcf58e21c8035500cd21ba164f85b9b4`.
 
+The size of the disk image `virtual_size: 138` in `metadata.json` indicates
+128 GiB converted to GB and rounded up to 1GB.
+
 Single 128 GiB disk storage is partitioned into:
 * The 1st partition partition is 1024 MiB ext4 mounted as `/boot`.
 * The 2nd partition is a single LVM physical volume for `fedora-server`
@@ -13,6 +16,10 @@ Single 128 GiB disk storage is partitioned into:
   * `fedora-server-root` volume is 100 GiB ext4 mounted as `/`;
   * `fedora-server-swap` volume is 1024 MiB ext4 volume for swap space;
   * unallocated space with 25+ GiB.
+
+**NOTE**: NFS-based [synced folders][3] do not work.
+Simple installation of `nfs-utils` package with its default configuration
+was not enough.
 
 ## Vagrant customization ##
 
@@ -32,24 +39,21 @@ Single 128 GiB disk storage is partitioned into:
 * Change hostname `/etc/hostname` to `vagrant`.
 * Disable `UseDNS` in SSH server (`/etc/ssh/sshd_config`).
 * Install `rsync` package (with dependencies).
-* Install `nfs-utils` package (with dependencies) to avoid
-  these commands to fail:
-  ```
-  /etc/init.d/rpcbind restart; /etc/init.d/nfs restart
-  ```
+* Install `nfs-utils` package (with dependencies).
 
 ## Change log ##
 
-* v1.2.0:
-  * Resize virtual disk image from 256 GiB to 128 GiB.
-  * Install `nfs-utils` package with dependencies to support
-    Vagrant [synced folders][3] based on NFS.
+* v1.1.0:
+  * Resize virtual disk image from 256 GiB to 128 GiB and
+    set `virtual_size` in `metadata.json` file to 238 GB.
+  * Install `nfs-utils` package with dependencies.
 
 * v1.0.2:
   Value `config.vm.box` in `Vagrantfile` was fixed to contain this box name.
 
 * v1.0.1:
-  Increase `virtual_size` in `metadata.json` file to 275 (which is 256 GiB converted to GB and rounded up to 1G).
+  Increase `virtual_size` in `metadata.json` file to 275 (which is
+  256 GiB converted to GB and rounded up to 1G).
 
 * v1.0.0:
   The first (initial) release.
