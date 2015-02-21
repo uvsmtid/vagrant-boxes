@@ -1,6 +1,8 @@
 
 CentOS 5.5 x86_64 "Minimal Install"
 
+* Box: [uvsmtid/centos-5.5-minimal][4]
+
 ## Description ##
 
 CentOS 5.5 was installed using [CentOS-5.5-x86_64-netinstall.iso][1]
@@ -71,4 +73,5 @@ Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/centos-5
 [1]: http://archive.kernel.org/centos-vault/5.5/isos/x86_64/CentOS-5.5-x86_64-netinstall.iso
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
 [3]: http://docs.vagrantup.com/v2/synced-folders/
+[4]: https://atlas.hashicorp.com/uvsmtid/boxes/centos-5.5-minimal
 

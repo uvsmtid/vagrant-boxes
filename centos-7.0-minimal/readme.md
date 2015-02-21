@@ -1,6 +1,8 @@
 
 CentOS 7.0 x86_64 "Minimal Install"
 
+* Box: [uvsmtid/centos-7.0-minimal][4]
+
 ## Description ##
 
 CentOS 7.0 was installed using [CentOS-7.0-1406-x86_64-NetInstall.iso][1]
@@ -70,4 +72,5 @@ Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/centos-7
 [1]: http://mirror.nus.edu.sg/centos/7.0.1406/isos/x86_64/CentOS-7.0-1406-x86_64-NetInstall.iso
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
 [3]: http://docs.vagrantup.com/v2/synced-folders/
+[4]: https://atlas.hashicorp.com/uvsmtid/boxes/centos-7.0-minimal
 

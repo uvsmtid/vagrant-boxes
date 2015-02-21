@@ -1,6 +1,8 @@
 
 Fedora 21 Server x86_64 "Minimal Install"
 
+* Box: [uvsmtid/fedora-21-server-minimal][4]
+
 ## Description ##
 
 Fedora 21 Server was installed using [Fedora-Server-netinst-x86_64-21.iso][1]
@@ -88,4 +90,5 @@ Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/fedora-2
 [1]: http://download.fedoraproject.org/pub/fedora/linux/releases/21/Server/x86_64/iso/Fedora-Server-netinst-x86_64-21.iso
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
 [3]: http://docs.vagrantup.com/v2/synced-folders/
+[4]: https://atlas.hashicorp.com/uvsmtid/boxes/fedora-21-server-minimal
 
