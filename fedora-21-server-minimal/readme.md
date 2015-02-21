@@ -83,6 +83,8 @@ Either use `rsync` or disable them:
 
 # footer #
 
+Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/fedora-21-server-minimal/readme.md
+
 [1]: http://download.fedoraproject.org/pub/fedora/linux/releases/21/Server/x86_64/iso/Fedora-Server-netinst-x86_64-21.iso
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
 [3]: http://docs.vagrantup.com/v2/synced-folders/

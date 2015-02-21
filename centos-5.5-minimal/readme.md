@@ -3,8 +3,11 @@ CentOS 5.5 x86_64 "Minimal Install"
 
 ## Description ##
 
-CentOS 5.5 was installed using [CentOS-5.5-x86_64-netinstall.iso][1] with
-SHA256 hash `298a219be14eb75157f173de25542510eec0682b6f33e67e84a2756ef7fa83ba`.
+CentOS 5.5 was installed using [CentOS-5.5-x86_64-netinstall.iso][1]
+with SHA256 hash:
+```
+298a219be14eb75157f173de25542510eec0682b6f33e67e84a2756ef7fa83ba
+```
 
 The URL for YUM repository:
   * _Web site name_: `archive.kernel.org`
@@ -26,7 +29,7 @@ Single 128 GiB disk storage is partitioned into:
 CentOS 5.5 does not have "Minimal Install" to select. Instead, all package
 groups were deselected to keep installation to the bare minimum.
 
-**NOTE**: NFS-based [synced folders][3] do not work.
+**NOTE**: NFS-based [synced folders][3] are not configured.
 Either use `rsync` or disable them:
   * `rsync`
     ```
@@ -62,6 +65,8 @@ Either use `rsync` or disable them:
   The first (initial) release.
 
 # footer #
+
+Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/centos-5.5-minimal/readme.md
 
 [1]: http://archive.kernel.org/centos-vault/5.5/isos/x86_64/CentOS-5.5-x86_64-netinstall.iso
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
