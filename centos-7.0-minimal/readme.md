@@ -1,5 +1,5 @@
 
-CentOS 7.0 x86_64 "Minimal Install"
+CentOS 7.0 x86_64 "Minimal Install" libvirt
 
 * Box: [uvsmtid/centos-7.0-minimal][4]
 

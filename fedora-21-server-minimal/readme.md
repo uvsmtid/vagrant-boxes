@@ -1,5 +1,5 @@
 
-Fedora 21 Server x86_64 "Minimal Install"
+Fedora 21 Server x86_64 "Minimal Install" libvirt
 
 * Box: [uvsmtid/fedora-21-server-minimal][4]
 
