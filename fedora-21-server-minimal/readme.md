@@ -14,7 +14,7 @@ Single 128 GiB disk storage is partitioned into:
   * The 2nd partition is a single LVM physical volume for `fedora-server`
     volume group split into:
     * `fedora-server-root` volume is 100 GiB ext4 mounted as `/`;
-    * `fedora-server-swap` volume is 1024 MiB ext4 volume for swap space;
+    * `fedora-server-swap` volume is 1024 MiB for swap space;
     * unallocated space with 25+ GiB.
 
 **NOTE**: NFS-based [synced folders][3] do not work.
