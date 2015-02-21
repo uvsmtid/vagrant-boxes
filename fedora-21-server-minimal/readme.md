@@ -10,16 +10,24 @@ The size of the disk image `virtual_size: 138` in `metadata.json` indicates
 128 GiB converted to GB and rounded up to 1GB.
 
 Single 128 GiB disk storage is partitioned into:
-* The 1st partition partition is 1024 MiB ext4 mounted as `/boot`.
-* The 2nd partition is a single LVM physical volume for `fedora-server`
-  volume group split into:
-  * `fedora-server-root` volume is 100 GiB ext4 mounted as `/`;
-  * `fedora-server-swap` volume is 1024 MiB ext4 volume for swap space;
-  * unallocated space with 25+ GiB.
+  * The 1st partition partition is 1024 MiB ext4 mounted as `/boot`.
+  * The 2nd partition is a single LVM physical volume for `fedora-server`
+    volume group split into:
+    * `fedora-server-root` volume is 100 GiB ext4 mounted as `/`;
+    * `fedora-server-swap` volume is 1024 MiB ext4 volume for swap space;
+    * unallocated space with 25+ GiB.
 
 **NOTE**: NFS-based [synced folders][3] do not work.
 Simple installation of `nfs-utils` package with its default configuration
-was not enough.
+was not enough. Either use `rsync` or disable them:
+  * `rsync`
+    ```
+    config.vm.synced_folder '.', '/vagrant', type: 'rsync'
+    ```
+  * disable
+    ```
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+    ```
 
 ## Vagrant customization ##
 
