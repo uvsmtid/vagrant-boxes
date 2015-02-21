@@ -3,8 +3,11 @@ Fedora 21 Server x86_64 "Minimal Install"
 
 ## Description ##
 
-Fedora 21 Server was installed using [netinstall x86_64 ISO image][1] with
-SHA256 hash `56af126a50c227d779a200b414f68ea7bcf58e21c8035500cd21ba164f85b9b4`.
+Fedora 21 Server was installed using [Fedora-Server-netinst-x86_64-21.iso][1]
+with SHA256 hash:
+```
+56af126a50c227d779a200b414f68ea7bcf58e21c8035500cd21ba164f85b9b4
+```
 
 The size of the disk image `virtual_size: 138` in `metadata.json` indicates
 128 GiB converted to GB and rounded up to 1GB.
@@ -17,9 +20,11 @@ Single 128 GiB disk storage is partitioned into:
     * `fedora-server-swap` volume is 1024 MiB for swap space;
     * unallocated space with 25+ GiB.
 
-**NOTE**: NFS-based [synced folders][3] do not work.
-Simple installation of `nfs-utils` package with its default configuration
-was not enough. Either use `rsync` or disable them:
+Option to avoid installing latest updates and use release-time packages
+were used.
+
+**NOTE**: NFS-based [synced folders][3] are not configured.
+Either use `rsync` or disable them:
   * `rsync`
     ```
     config.vm.synced_folder '.', '/vagrant', type: 'rsync'
@@ -31,8 +36,14 @@ was not enough. Either use `rsync` or disable them:
 
 ## Vagrant customization ##
 
-* Create `vagrant` user with password `vagrant`.
+* Create `vagrant` user with password `vagrant`, `uid = 1000`, `gid = 1000`.
 * Set up [insecure SSH keys][2] for `vagrant` user.
+  ```
+  VAGRANT_HOST_IP=1.1.1.1
+  ssh-copy-id -i vagrant.key     vagrant@${VAGRANT_HOST_IP}
+  scp            vagrant.key     vagrant@${VAGRANT_HOST_IP}:.ssh/id_rsa
+  scp            vagrant.key.pub vagrant@${VAGRANT_HOST_IP}:.ssh/id_rsa.pub
+  ```
 * Set up  password-less `sudo` for `vagrant` user by adding line
   to `/etc/sudoers`:
   ```
@@ -47,9 +58,13 @@ was not enough. Either use `rsync` or disable them:
 * Change hostname `/etc/hostname` to `vagrant`.
 * Disable `UseDNS` in SSH server (`/etc/ssh/sshd_config`).
 * Install `rsync` package (with dependencies).
-* Install `nfs-utils` package (with dependencies).
 
 ## Change log ##
+
+* v1.1.1:
+  * Remove NFS configuration (it does not work with zero-configured
+    `nfs-utils` package) for synced folders. Only `rsync` type can
+    be used.
 
 * v1.1.0:
   * Resize virtual disk image from 256 GiB to 128 GiB and
