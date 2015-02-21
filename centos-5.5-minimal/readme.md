@@ -63,6 +63,9 @@ Either use `rsync` or disable them:
 
 ## Change log ##
 
+* v1.0.1:
+  Re-run first boot to avoid setup agent on boot next time.
+
 * v1.0.0:
   The first (initial) release.
 
