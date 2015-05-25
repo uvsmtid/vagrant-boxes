@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# This script should be run from root of the `vagrant-boxes.git` repository.
+# This script should be run from root of the `vagrant-boxes.git` repository:
+#   https://github.com/uvsmtid/vagrant-boxes
+#
 # For example:
 #   ./scripts/package.sh centos-7.0-minimal
 

@@ -14,8 +14,44 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 end
 ```
 
+## Build new version ##
+
+*   Follow (example) [readme][2] to reinstall fresh OS.
+
+*   Shut down virtual machine and copy its storage image as `box.img`
+    under (example) [box directory][4].
+
+*   Make sure (example) [metadata.json][5] reflects correct image size
+    in `virtual_size`.
+
+*   Update (example) [package_file_name][6].
+
+    File named `package_file_name` is supposed to provide name for the package
+    without any suffixes later added by `tar` and `gzip`. The box version
+    number (suffix) is still part of the name, for example:
+    ```
+    centos-7.1-1503-gnome-1.0.0-box
+    ```
+    Trim leading and trailing whitespaces.
+
+*   Run [package_box.sh][7] from the root of the repo.
+
+*   Upload generated `tar` file to a server with publicly accessible URL.
+
+*   Publish description at [atlas.hashicorp.com][8].
+
+*   Update (example) [change log][3].
+
 # footer #
 
 Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/readme.md
 
 [1]: http://docs.vagrantup.com/v2/boxes/base.html
+[2]: centos-7.1-1503-gnome/readme.md
+[3]: centos-7.1-1503-gnome/readme.md#change-log
+[4]: centos-7.1-1503-gnome
+[5]: centos-7.1-1503-gnome/metadata.json
+[6]: centos-7.1-1503-gnome/package_file_name
+[7]: scripts/package_box.sh
+[8]: https://atlas.hashicorp.com/boxes/new
+
