@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# This script should be run from root of the `vagrant-boxes.git` repository.
+# This script should be run from root of the `vagrant-boxes.git` repository:
+#   https://github.com/uvsmtid/vagrant-boxes
+#
 # For example:
 #   ./scripts/package.sh centos-7.0-minimal
 
@@ -8,6 +10,7 @@ set -x
 set -e
 set -u
 
+# Box name matches directory name.
 box_name="${1}"
 
 # File named `package_file_name` is supposed to provide name for the package
