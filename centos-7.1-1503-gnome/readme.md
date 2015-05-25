@@ -42,23 +42,43 @@ were used.
         NFS-based [synced folders][3] are not configured.
         Either use `rsync` or disable them:
 
-*   `rsync`
+## `Vagrantfile` settings ##
+
+*   Enable `rsync` method:
 
     ```
     config.vm.synced_folder '.', '/vagrant', type: 'rsync'
     ```
 
-*   disable
+*   Disable any syncing:
 
     ```
     config.vm.synced_folder '.', '/vagrant', disabled: true
     ```
 
-## Vagrant customization ##
+## Vagrant OS customization ##
 
 *   Create `vagrant` user with password `vagrant`, `uid = 1000`, `gid = 1000`.
 
 *   Set up [insecure SSH keys][2] for `vagrant` user.
+
+    *   Private key: https://raw.githubusercontent.com/mitchellh/vagrant/004ea50bf2ae55d563fd9da23cb2d6ec6cd447e4/keys/vagrant
+
+        Download and set permissions:
+
+        ```
+        ll /home/vagrant/.ssh/id_rsa
+        -rw-------. 1 vagrant vagrant 1675 May 26 01:24 /home/vagrant/.ssh/id_rsa
+        ```
+
+    *   Public key: https://raw.githubusercontent.com/mitchellh/vagrant/004ea50bf2ae55d563fd9da23cb2d6ec6cd447e4/keys/vagrant.pub
+
+        Download and set permissions:
+
+        ```
+        ll /home/vagrant/.ssh/id_rsa.pub
+        -rw-r--r--. 1 vagrant vagrant 411 May 26 01:24 /home/vagrant/.ssh/id_rsa.pub
+        ```
 
 *   Set up  password-less `sudo` for `vagrant` user by adding line
     to `/etc/sudoers`:

@@ -1,5 +1,5 @@
 This repo contains files with configuration and documentation for Vagrant
-[base boxes][1].
+these [base boxes][1]: https://atlas.hashicorp.com/uvsmtid
 
 ## Example `Vagrantfile` ##
 
@@ -18,8 +18,11 @@ end
 
 *   Follow (example) [readme][2] to reinstall fresh OS.
 
-*   Shut down virtual machine and copy its storage image as `box.img`
-    under (example) [box directory][4].
+*   Shut down virtual machine and make a clone using `virt-manager`.
+
+    This will shrink size of the image (without compression).
+
+*   Copy its storage image as `box.img` under (example) [box directory][4].
 
 *   Make sure (example) [metadata.json][5] reflects correct image size
     in `virtual_size`.
@@ -40,6 +43,8 @@ end
 
 *   Publish description at [atlas.hashicorp.com][8].
 
+*   Test box using (example) `Vagrantfile` [file][9].
+
 *   Update (example) [change log][3].
 
 # footer #
@@ -54,4 +59,5 @@ Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/readme.m
 [6]: centos-7.1-1503-gnome/package_file_name
 [7]: scripts/package_box.sh
 [8]: https://atlas.hashicorp.com/boxes/new
+[9]: #example-vagrantfile
 
