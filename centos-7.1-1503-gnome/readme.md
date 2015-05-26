@@ -60,6 +60,8 @@ were used.
 
 *   Create `vagrant` user with password `vagrant`, `uid = 1000`, `gid = 1000`.
 
+*   Do not forget to make sure network interface is up on boot.
+
 *   Set up [insecure SSH keys][2] for `vagrant` user.
 
     *   Private key: https://raw.githubusercontent.com/mitchellh/vagrant/004ea50bf2ae55d563fd9da23cb2d6ec6cd447e4/keys/vagrant
@@ -79,6 +81,8 @@ were used.
         ll /home/vagrant/.ssh/id_rsa.pub
         -rw-r--r--. 1 vagrant vagrant 411 May 26 01:24 /home/vagrant/.ssh/id_rsa.pub
         ```
+
+    *   Do not forget to add the key into `authorized_keys` (use `ssh-copy-id`).
 
 *   Set up  password-less `sudo` for `vagrant` user by adding line
     to `/etc/sudoers`:
@@ -103,6 +107,10 @@ were used.
 *   Install `rsync` package (with dependencies).
 
 ## Change log ##
+
+*   v1.0.1:
+    *   Enable network interface on boot.
+    *   Add vagrant public SSH key into `authorized_keys`.
 
 *   v1.0.0:
     The first (initial) release.
