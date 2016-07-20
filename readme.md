@@ -22,7 +22,12 @@ end
 
     This will shrink size of the image (without compression).
 
-*   Copy its storage image as `box.img` under (example) [box directory][4].
+*   Copy its storage image as `box.img` under (example) [box directory][4]:
+
+    ```
+    sudo cp /var/lib/libvirt/images/centos-7.1-1503-gnome.qcow2 centos-7.1-1503-gnome/box.img
+    sudo chown username centos-7.1-1503-gnome/box.img
+    ```
 
 *   Make sure (example) [metadata.json][5] reflects correct image size
     in `virtual_size`.
@@ -32,12 +37,19 @@ end
     File named `package_file_name` is supposed to provide name for the package
     without any suffixes later added by `tar` and `gzip`. The box version
     number (suffix) is still part of the name, for example:
+
     ```
     centos-7.1-1503-gnome-1.0.0-box
     ```
+
     Trim leading and trailing whitespaces.
 
-*   Run [package_box.sh][7] from the root of the repo.
+*   Run [package_box.sh][7] from the root of the repo with the box
+    directory name as single argument:
+
+    ```
+    scripts/package_box.sh centos-7.1-1503-gnome
+    ```
 
 *   Upload generated `tar` file to a server with publicly accessible URL.
 
@@ -46,6 +58,18 @@ end
 *   Test box using (example) `Vagrantfile` [file][9].
 
 *   Update (example) [change log][3].
+
+# Using unpublished Vagrant box #
+
+In this section another box is used as an example (which was unpublished) -
+`windows-server-2012-R2-gui`:
+
+```
+vagrant box add windows-server-2012-R2-gui windows-server-2012-R2-gui-1.0.0-box.tar.gz
+```
+
+NOTE: Specifically this box (because it is Windows) requires
+its own more customized [Vagrantfile][10] to run.
 
 # footer #
 
@@ -60,4 +84,5 @@ Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/readme.m
 [7]: scripts/package_box.sh
 [8]: https://atlas.hashicorp.com/boxes/new
 [9]: #example-vagrantfile
+[10]: /windows-server-2012-R2-gui/Vagrantfile
 
