@@ -43,6 +43,94 @@ option 2 was selected in the following list:
 The entire "Drive 0 Unallocated Space" was used as storage for installation
 (which indicated detected size of 100 GB).
 
+As soon as installation was completed, in response to prompt for
+administrator password `Vagrant2012!` was used (to pass through
+password complexity requirements) as initial password.
+The passwords are subsequently disabled.
+
+The following steps were completed in accordance with
+[official requirements][1] listed by Vagrant for Windows.
+
+*   Turn off UAC
+
+    *   "Start".
+    *   Search for "UAC".
+    *   Select "Change User Account Control settings".
+    *   "User Account Control Settings" dialogue will be opened.
+
+    Pull the slider to "Never notify".
+
+    In addition to this, UAC has to be disabled through registry.
+    Run `regedit` and set the `EnableLUA` registry key under the following
+    directory to `0x00000000`:
+
+    ```
+    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system
+    ```
+
+    This can be done automatically by executing this command:
+
+    ```
+    reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system /v EnableLUA /d 0 /t REG_DWORD /f /reg:64
+    ```
+
+*   Disable complex passwords
+
+    *   "Start".
+    *   Open "Administrative Tools".
+    *   Select "Local Security Policy".
+    *   Select "Security Settings" / "Account Policies" / "Password Policy".
+    *   Open "Password must meet complexity requirements".
+    *   Select "Disabled".
+
+    In addition to this, in the same list:
+    *   Open "Maximum password age".
+    *   Set "0" ("Password will never expire").
+
+*   Disable "Shutdown Tracker"
+
+    *   "Start".
+    *   Search "gpedit.msc" and run it.
+    *   Select "Local Computer Policy" / "Administrative Templates" / "System".
+    *   Open "Display Shutdown Event Tracker".
+    *   Select "Disabled".
+
+    This can also be checked in registry.
+    Run `regedit` and check that the `ShutdownReasonOn` registry key under
+    the following directory is set to `0x00000000`:
+
+    ```
+    HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Reliability
+    ```
+
+*   Disable "Server Manager" starting at login (for non-Core)
+
+    Apparently, "for non-Core" means GUI installation version selected above
+    (our case).
+
+    *   "Start".
+    *   Open "Server Manager".
+    *   Select "Manage" on the top bar.
+    *   Select "Server Manager Properties" from the drop down menu.
+    *   Select "Do not start Server Manager automatically at logon".
+
+    There is also a way to set/check it via registry -
+    see [this article][4].
+
+*   Base WinRM Configuration
+
+    Set the WinRM service to auto-start and allow unencrypted basic auth -
+    start `cmd` and run the following commands:
+
+    ```
+    winrm quickconfig -q
+    winrm set winrm/config/winrs @{MaxMemoryPerShellMB="512"}
+    winrm set winrm/config @{MaxTimeoutms="1800000"}
+    winrm set winrm/config/service @{AllowUnencrypted="true"}
+    winrm set winrm/config/service/auth @{Basic="true"}
+    sc config WinRM start=auto
+    ```
+
 ## `Vagrantfile` settings ##
 
 TODO: This section has not been updated - it is not applicable to Windows.
@@ -118,6 +206,8 @@ TODO: This section has not been updated - it is not applicable to Windows.
 
 ---
 
+[1]: https://www.vagrantup.com/docs/boxes/base.html#windows-boxes
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
 [3]: http://docs.vagrantup.com/v2/synced-folders/
+[4]: https://blogs.technet.microsoft.com/rmilne/2014/05/30/how-to-hide-server-manager-at-logon/
 
