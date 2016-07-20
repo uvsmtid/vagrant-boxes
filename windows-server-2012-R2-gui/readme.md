@@ -5,6 +5,45 @@ NOTE: It is not published Vagrant box.
 
 This document only provides steps how the box was created.
 
+## Prerequisites ##
+
+TODO: The steps provided in this section didn't succeed.
+
+This VM uses its own custumized `Vagrantfile` which depends on
+packaging of `winrm` together with Vagrant (and specific virtual hardware).
+
+Instead of using default OS package repository, the installed
+Vagrant package was from official Vagrant web site:
+
+```
+wget --no-check-certificate http://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.rpm
+```
+
+This package is said to be for CentOS. However, it also worked on Fedora 24:
+
+```
+dnf install vagrant_1.8.5_x86_64.rpm
+```
+
+Because this package cannot find `vagrant-libvirt` plugin,
+it has to be installed (but this command failed):
+
+```
+vagrant plugin install libvirt
+```
+
+It failed due to proxied environment and SSL certificates.
+
+Instad of proper plugin installation, `vagrant-libvirt` was copied
+as a hack under required `vagrant` directory:
+
+```
+cp -rp /usr/share/vagrant/gems/gems/vagrant-libvirt-0.0.32/lib/vagrant-libvirt /opt/vagrant/embedded/gems/gems/vagrant-1.8.5/test/unit/plugins/providers/
+```
+
+This also didn't work.
+TODO: Fix running Windows box on linux with `vagrant-libvirt`.
+
 ## Description ##
 
 The initial installation was done using
@@ -14,6 +53,13 @@ with the following `sha256sum`
 ```
 6612b5b1f53e845aacdf96e974bb119a3d9b4dcb5b82e65804ab7e534dc7b4d5
 ```
+
+TODO: Update the box to use `VirtIO` storage instead of `IDE`.
+This likely requires recreation of virtual machine with pre-boot settings
+to specify storage type, then reinstallation of Windows from scratch
+possibly providing necessary drivers in the process.
+
+TODO: The same steps for `VirtIO` device has to be done for network.
 
 The size of the disk image `virtual_size: 108` in `metadata.json` indicates
 100 GiB converted to GB and rounded up to 1GB.
@@ -45,8 +91,9 @@ The entire "Drive 0 Unallocated Space" was used as storage for installation
 
 As soon as installation was completed, in response to prompt for
 administrator password `Vagrant2012!` was used (to pass through
-password complexity requirements) as initial password.
-The passwords are subsequently disabled.
+password complexity requirements).
+
+TODO: Update box and change password to trivial `vagrant`.
 
 The following steps were completed in accordance with
 [official requirements][1] listed by Vagrant for Windows.
