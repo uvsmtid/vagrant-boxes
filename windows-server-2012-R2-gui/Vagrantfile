@@ -42,6 +42,9 @@ Vagrant.configure('2') do |config|
     test_vm.winrm.username = "Administrator"
     test_vm.winrm.password = "Vagrant2012!"
 
+    # Disable default sync folder.
+    test_vm.vm.synced_folder '.', '/vagrant', disabled: true
+
     # Interfaces for VM
     #
     # Networking features in the form of `config.vm.network` support private

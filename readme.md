@@ -61,15 +61,23 @@ end
 
 # Using unpublished Vagrant box #
 
-In this section another box is used as an example (which was unpublished) -
-`windows-server-2012-R2-gui`:
+In this section another (unpublished) box is used as an example -
+`windows-server-2012-R2-gui`. It cannot be downloaded from public sources,
+but it can be reproduced based on [its description][11].
+
+As soon as the box file (archive) is generated, it can be added to Vagrant:
 
 ```
-vagrant box add windows-server-2012-R2-gui windows-server-2012-R2-gui-1.0.0-box.tar.gz
+vagrant box add --name windows-server-2012-R2-gui windows-server-2012-R2-gui-1.0.0-box.tar.gz
 ```
 
-NOTE: Specifically this box (because it is Windows) requires
-its own more customized [Vagrantfile][10] to run.
+NOTE:
+Specifically this box requires its own more customized
+[`Vagrantfile`][10] to run (because it is Windows). The simples way
+is to run Vagrant directly in the [`windows-server-2012-R2-gui`][12] directory
+of this Git repository's local clone using the mentioned
+`Vagrantfile` directly. The steps to make Vagrant work on Linux host
+with Windows guest may also be non-trivial - see the [descriptoin][11].
 
 # footer #
 
@@ -85,4 +93,6 @@ Link to this file: https://gitlab.com/uvsmtid/vagrant-boxes/blob/master/readme.m
 [8]: https://atlas.hashicorp.com/boxes/new
 [9]: #example-vagrantfile
 [10]: /windows-server-2012-R2-gui/Vagrantfile
+[11]: /windows-server-2012-R2-gui/readme.md
+[12]: /windows-server-2012-R2-gui
 

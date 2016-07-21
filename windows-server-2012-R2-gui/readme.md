@@ -3,60 +3,8 @@ Windows Server 2012 R2 x86_64 GUI libvirt
 
 NOTE: It is not published Vagrant box.
 
-This document only provides steps how the box was created.
-
-## Prerequisites ##
-
-TODO: The steps provided in this section didn't succeed.
-
-This VM uses its own custumized `Vagrantfile` which depends on
-packaging of `winrm` together with Vagrant (and specific virtual hardware).
-
-Instead of using default OS package repository, the installed
-Vagrant package was from official Vagrant web site:
-
-```
-wget --no-check-certificate http://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.rpm
-```
-
-This package is said to be for CentOS. However, it also worked on Fedora 24:
-
-```
-dnf install vagrant_1.8.5_x86_64.rpm
-```
-
-Because this package cannot find `vagrant-libvirt` plugin,
-it has to be installed (but this command failed):
-
-```
-vagrant plugin install libvirt
-```
-
-It failed due to proxied environment and SSL certificates.
-
-Instad of proper plugin installation, `vagrant-libvirt` was copied
-as a hack under required `vagrant` directory:
-
-```
-cp -rp /usr/share/vagrant/gems/gems/vagrant-libvirt-0.0.32/lib/vagrant-libvirt /opt/vagrant/embedded/gems/gems/vagrant-1.8.5/test/unit/plugins/providers/
-```
-
-This also didn't work.
-TODO: Fix running Windows box on linux with `vagrant-libvirt`.
-
-### Next attempt ###
-
-```
-# Fails with error message:
-#     extconf.rb:73:in `<main>': libvirt library not found in default locations (RuntimeError)
-vagrant plugin install vagrant-libvirt
-
-# Provides libvirt headers for development.
-dnf install libvirt-devel
-
-# Successful re-try.
-vagrant plugin install vagrant-libvirt
-```
+This document only provides steps
+how the box was created and how it can be used.
 
 ## Description ##
 
@@ -192,73 +140,105 @@ The following steps were completed in accordance with
     sc config WinRM start=auto
     ```
 
-## `Vagrantfile` settings ##
+TODO:
+Should hostname be fixed to `vagrant` manually or Vagrant
+may take care of hosname itself automatically?
 
-TODO: This section has not been updated - it is not applicable to Windows.
+## Operation ##
 
-*   Enable `rsync` method:
+After creation of the box and before using it,
+some (prerequisites)[#prerequisites] has to be installed.
 
-    ```
-    config.vm.synced_folder '.', '/vagrant', type: 'rsync'
-    ```
+It was noticed that somehow (possibly due to using the official Vagrant
+package with more than one provider pre-installed) `libvirt` is may not be
+recognized as default provider (as usually on Linux).
+So, some commands require explicit `--provider libvirt` option
+(but, inconveniently, not all uniformally can take it and fail instead):
 
-*   Disable any syncing:
+```
+vagrant up --provider libvirt
+vagrant destroy
+```
 
-    ```
-    config.vm.synced_folder '.', '/vagrant', disabled: true
-    ```
+In addition to this, if host uses proxied Internet, `winrm` communication
+fails due to obvious bug (because `winrm` should not use `http_proxy` and
+`https_proxy` environment variables for non-HTTP(S) communication) -
+see [details here][5].
 
-## Vagrant OS customization ##
+Disable environments selectively for just `vagrant` commands:
 
-TODO: This section has not been updated - it is not applicable to Windows.
+```
+(unset http_proxy https_proxy ; vagrant up --provider libvirt)
+(unset http_proxy https_proxy ; vagrant destroy)
+```
 
-*   Create `vagrant` user with password `vagrant`, `uid = 1000`, `gid = 1000`.
+## Prerequisites ##
 
-*   Do not forget to make sure network interface is up on boot.
+The steps below differentiate:
 
-*   Set up [insecure SSH keys][2] for `vagrant` user.
+*   **Standard** Vagrant package provided in Fedora 24 repositories.
 
-    *   Private key: https://raw.githubusercontent.com/mitchellh/vagrant/004ea50bf2ae55d563fd9da23cb2d6ec6cd447e4/keys/vagrant
+*   **Official** Vagrant package provided at: https://www.vagrantup.com/downloads.html
 
-        Download and set permissions:
+### `winrm` ###
 
-        ```
-        ll /home/vagrant/.ssh/id_rsa
-        -rw-------. 1 vagrant vagrant 1675 May 26 01:24 /home/vagrant/.ssh/id_rsa
-        ```
+This VM uses its own custumized `Vagrantfile` which depends on
+specific virtual hardware settings to match pre-installed Windows drivers.
 
-    *   Public key: https://raw.githubusercontent.com/mitchellh/vagrant/004ea50bf2ae55d563fd9da23cb2d6ec6cd447e4/keys/vagrant.pub
+Because VM runs Windows, it requires `winrm` packaged together with Vagrant.
+Standard Fedora 24 Vagrant RPM does not include `winrm` and there is
+no known way to install it in addition - for example, it is possible
+to install `winrm` using the following command, but the Fedora 24 Vagrant
+still does not see the installation.
 
-        Download and set permissions:
+It is possible to make this command succeed either for regular user
+or for `root` - the gem `winrm` will be installed:
 
-        ```
-        ll /home/vagrant/.ssh/id_rsa.pub
-        -rw-r--r--. 1 vagrant vagrant 411 May 26 01:24 /home/vagrant/.ssh/id_rsa.pub
-        ```
+```
+# Adding non-https URL is only required in proxied environment:
+gem sources --remove  https://rubygems.org/
+gem sources --add      http://rubygems.org/
 
-    *   Do not forget to add the key into `authorized_keys` (use `ssh-copy-id`).
+gem install -r winrm
+```
 
-*   Set up  password-less `sudo` for `vagrant` user by adding line
-    to `/etc/sudoers`:
+However, Vagrant will stil not be able to find `winrm` package:
 
-    ```
-    vagrant ALL=(ALL) NOPASSWD:ALL
-    ```
+```
+vagrant up
+/usr/share/vagrant/plugins/communicators/winrm/shell.rb:9:in `require': cannot load such file -- winrm (LoadError)
+...
+```
 
-*   Disable `requiretty` for `sudo` command by adding line
-    to `/etc/sudoers`:
+The only known tested solution is to use official Vagrant package.
+This package is said to be for CentOS. However, it also worked on Fedora 24:
 
-    ```
-    Defaults !requiretty
-    ```
+```
+wget --no-check-certificate http://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.rpm
+dnf install vagrant_1.8.5_x86_64.rpm
+```
 
-*   Set `root` user's password to `vagrant`.
+Now, this package cannot find `vagrant-libvirt` plugin (installed from
+standard Fedora 24 repository).
 
-*   Change hostname `/etc/hostname` to `vagrant`.
+### `vagrant-libvirt` ###
 
-*   Disable `UseDNS` in SSH server (`/etc/ssh/sshd_config`).
+Normally, it can be easliy installed from standard Fedora 24 repository.
+However, when official Vagrant package is used (to provide `winrm` dependency),
+there is no known way to make it see `vagrant-libvirt`.
 
-*   Install `rsync` package (with dependencies).
+Instead, install `vagrant-libvirt` through `vagrant` command itself.
+In order to succeed, it requires pre-installed `libvirt-devel` package.
+In addition to that, if the access to Internet is proxied and it has
+issues with https, there is no known way to tell `vagrant` to use
+non-https URL like it is possible with `gem` command - therefore,
+use (temporarily) direct Internet access.
+
+```
+unset http_proxy https_proxy
+sudo dnf install libvirt-devel
+vagrant plugin install libvirt
+```
 
 ## Change log ##
 
@@ -271,4 +251,5 @@ TODO: This section has not been updated - it is not applicable to Windows.
 [2]: https://github.com/mitchellh/vagrant/tree/master/keys
 [3]: http://docs.vagrantup.com/v2/synced-folders/
 [4]: https://blogs.technet.microsoft.com/rmilne/2014/05/30/how-to-hide-server-manager-at-logon/
+[5]: https://github.com/WinRb/WinRM/issues/208#issuecomment-234143484
 
