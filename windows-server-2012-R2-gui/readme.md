@@ -44,6 +44,20 @@ cp -rp /usr/share/vagrant/gems/gems/vagrant-libvirt-0.0.32/lib/vagrant-libvirt /
 This also didn't work.
 TODO: Fix running Windows box on linux with `vagrant-libvirt`.
 
+### Next attempt ###
+
+```
+# Fails with error message:
+#     extconf.rb:73:in `<main>': libvirt library not found in default locations (RuntimeError)
+vagrant plugin install vagrant-libvirt
+
+# Provides libvirt headers for development.
+dnf install libvirt-devel
+
+# Successful re-try.
+vagrant plugin install vagrant-libvirt
+```
+
 ## Description ##
 
 The initial installation was done using
